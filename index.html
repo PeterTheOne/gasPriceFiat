@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Gas Price Fiat</title>
+
+    <style>
+      html, body {
+        text-align: center;
+        font-family: sans-serif;
+        background: lightpink;
+        color: chocolate;
+        display: flex;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+      }
+
+      h1 {
+        font-size: 5rem;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="text"></h1>
+
+    <script>
+      const text = document.getElementById('text');
+
+      init();
+      async function init() {
+        const ethGasResp = await fetch('https://ethgasstation.info/api/ethgasAPI.json', {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
+
+        const ethGas = await ethGasResp.json();
+
+        //console.log(ethGas);
+
+        const ethPriceResp = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd', {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
+        const ethPrice = await ethPriceResp.json();
+        //console.log(ethPrice);
+
+
+        const costs = (21000 * (ethGas.average / 10) * ethPrice.ethereum.usd) / 1000000000;
+        text.textContent = `A 21000 gas tx costs ${costs.toFixed(2)} USD on Ethereum.`;
+      }
+    </script>
+  </body>
+</html>

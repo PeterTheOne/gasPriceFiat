@@ -7,12 +7,14 @@
     <title>Gas Price Fiat</title>
 
     <style>
-      html, body {
+      html {
         text-align: center;
         font-family: sans-serif;
+        color: chocolate;
         background: rgb(255,203,211);
         background: linear-gradient(135deg, rgba(255,203,211,1) 0%, rgba(227,150,161,1) 100%);
-        color: chocolate;
+      }
+      html, body {
         display: flex;
         margin: 0;
         padding: 0;
@@ -38,12 +40,12 @@
         font-weight: bold;
         color: chocolate;
         display: inline-block;
-        text-align: center;
+        text-align: right;
       }
     </style>
   </head>
   <body>
-    <h1>A <input id="input" type="text" size="3" value="21000" placeholder="21000" /> gas tx costs <span id="text">-,--</span> USD on Ethereum.</h1>
+    <h1><input id="input" type="text" size="5" value="21000" placeholder="21000" /> gas cost $ <span id="text">-,--</span> on Ethereum</h1>
     <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSIw4e2FBC8Cw9IaeJSDI8w5tYFGDfKVLLroweRP10hHkiqZd3ukjH0iUhMrU52Fcx1kml0DiMJ1ojo/pubhtml?gid=1051267713&single=false">
       historical
     </a>

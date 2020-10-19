@@ -29,26 +29,49 @@
       a {
         color: chocolate;
       }
+
+      input {
+        background: none;
+        border: none;
+        font-size: 5rem;
+        font-weight: bold;
+        color: chocolate;
+        display: inline-block;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
-    <h1 id="text">A 21000 gas tx costs -,-- USD on Ethereum.</h1>
-    <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSIw4e2FBC8Cw9IaeJSDI8w5tYFGDfKVLLroweRP10hHkiqZd3ukjH0iUhMrU52Fcx1kml0DiMJ1ojo/pubhtml?gid=1051267713&single=true">
+    <h1>A <input id="input" type="text" size="3" value="21000" placeholder="21000" /> gas tx costs <span id="text">-,--</span> USD on Ethereum.</h1>
+    <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSIw4e2FBC8Cw9IaeJSDI8w5tYFGDfKVLLroweRP10hHkiqZd3ukjH0iUhMrU52Fcx1kml0DiMJ1ojo/pubhtml?gid=1051267713&single=false">
       historical
     </a>
 
     <script>
       const text = document.getElementById('text');
+      const input = document.getElementById('input');
+      let ethGas;
+      let ethPrice;
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      let gasLimit = urlParams.has('gas') ? urlParams.get('gas') : 21000;
 
-      init();
-      async function init() {
+      input.value = gasLimit;
+
+      input.addEventListener('keyup', () => {
+        gasLimit = input.value;
+        calc();
+      })
+
+      fetchFromApi();
+      async function fetchFromApi() {
         const ethGasResp = await fetch('https://ethgasstation.info/api/ethgasAPI.json', {
           headers: {
             'Content-Type': 'application/json'
           },
         });
 
-        const ethGas = await ethGasResp.json();
+        ethGas = await ethGasResp.json();
 
         //console.log(ethGas);
 
@@ -57,12 +80,16 @@
             'Content-Type': 'application/json'
           },
         });
-        const ethPrice = await ethPriceResp.json();
-        //console.log(ethPrice);
+        ethPrice = await ethPriceResp.json();
 
+        calc();
+      }
 
-        const costs = (21000 * (ethGas.average / 10) * ethPrice.ethereum.usd) / 1000000000;
-        text.textContent = `A 21000 gas tx costs ${costs.toFixed(2)} USD on Ethereum.`;
+      function calc() {
+        console.log('calc');
+
+        const costs = (gasLimit * (ethGas.average / 10) * ethPrice.ethereum.usd) / 1000000000;
+        text.textContent = costs.toFixed(2);
       }
     </script>
   </body>
